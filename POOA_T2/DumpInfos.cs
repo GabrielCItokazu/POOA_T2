@@ -13,22 +13,20 @@ namespace POOA_T2
 
         public async Task<List<string>> dumpAsync(String site, String tag, String classe)
         {
-            List<string> linha_completa = new List<string>();
+            List<string> l = new List<string>();
 
             var config = Configuration.Default.WithDefaultLoader(); //Configuração padrão do AngleSharp
             var address = site;
             var document = await BrowsingContext.New(config).OpenAsync(address); //Pega o código do site/endereço
 
-            //feed-post-link gui-color-primary gui-color-hover (tag do g1.globo.com)           
-
             //LINQ 
             var blueListItemsLinq = document.All.Where(m => m.LocalName == tag && m.GetAttribute("class") == classe);
             foreach (var item in blueListItemsLinq)
             {                
-                linha_completa.Add("Principal;" + item.Text() + ";" + item.GetAttribute("href") + ";"); //Cria no formato Principal;Titulo;Link e adiciona na lista de strings que será retornada
+                l.Add("Principal;" + item.Text() + ";" + item.GetAttribute("href") + ";"); //Cria no formato Principal;Titulo;Link e adiciona na lista de strings que será retornada
             }            
 
-            return linha_completa;
+            return l;
         }
 
     }

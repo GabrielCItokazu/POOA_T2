@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using System.IO;
 
 namespace POOA_T2
 {
@@ -12,6 +11,7 @@ namespace POOA_T2
         DumpInfos dumpInfos = new DumpInfos(); //Classe que pega o conteúdo da tag com o titulo da noticia
         TreatmentStrings treatmentStrings = new TreatmentStrings(); //Classe que junta o conteúdo gerado pela classe anterior
         Diretorio diretorio = new Diretorio(); //Classe que retorna o caminho de onde vai ter o arquivo gerado (retorna somente o diretório, não cria o arquivo)
+        Write write = new Write(); //Classe responsável por colocar os dados em algum lugar (arquivo, textbox, etc)
 
         public Form1()
         {
@@ -32,24 +32,18 @@ namespace POOA_T2
             int i = 1;
             foreach (Site s in sites)
             {
-                executa(s, "", "Gerado" + i, "csv"); //objeto do tipo site, diretório, nome_arquivo, formato_arquivo
+                executa(s, "", "Gerado" + i, "csv"); //Parâmetros: Objeto do tipo Site, diretório, nome_arquivo, formato_arquivo
                 i++;
             }
-            /*Site site = new Site("https://g1.globo.com/", "a", "feed-post-link gui-color-primary gui-color-hover");
-            MessageBox.Show(site.getUrl(), "Teste");
-            MessageBox.Show(site.getTag(), "Teste1");
-            MessageBox.Show(site.getClasse(), "Teste2");
-            executa(site, @"C:\Users\Gabriel\Desktop\", "Gerado", "csv");*/
         }
 
         private async System.Threading.Tasks.Task executa(Site site, String caminho = "", String nomeArq = "", String extensao = "")
         {
-            string dir = diretorio.geraDiretorio(caminho, nomeArq, extensao);
-            List<string> linha_completa = await dumpInfos.dumpAsync(site.getUrl(), site.getTag(), site.getClasse());
-            String ger = treatmentStrings.createString(linha_completa); //Junta em uma string só todas as linhas criadas na dumpInfos
+            string dir = diretorio.geraDiretorio(caminho, nomeArq, extensao); //Gera o caminho completo, incluindo o nome do arquivo, mas não cria o arquivo
+            List<string> l = await dumpInfos.dumpAsync(site.getUrl(), site.getTag(), site.getClasse());
+            String ger = treatmentStrings.createString(l); //Junta em uma string só todas as linhas criadas na dumpInfos
 
-            File.WriteAllText(dir, ger, System.Text.Encoding.UTF8); //Cria efetivamente o arquivo com os dados
-            File.SetAttributes(dir, FileAttributes.ReadOnly); //Altera o atributo do arquivo para "somente leitura"
+            write.inFile(dir, ger); //Cria o arquivo com o texto
 
             MessageBox.Show("Finalizado!", "Aviso");
         }
