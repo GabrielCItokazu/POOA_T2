@@ -13,7 +13,7 @@ namespace POOA_T2
 
         public String createString(List<string> linha)
         {
-            String completo = "Tipo;Titulo;Link\n";          
+            String completo = "Tipo;Titulo;Link\n";     
 
             foreach (string l in linha)
             {

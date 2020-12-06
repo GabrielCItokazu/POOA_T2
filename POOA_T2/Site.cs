@@ -1,6 +1,6 @@
 ﻿namespace POOA_T2
 {
-    class Site //Classe model
+    class Site //Classe model para o site
     {
 
         private string url, tag, classe;

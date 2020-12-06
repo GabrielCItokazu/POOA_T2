@@ -24,6 +24,7 @@ namespace POOA_T2
 
         private void btn_Go_Click(object sender, EventArgs e)
         {
+            //Cria uma lista com os sites
             List<Site> sites = new List<Site>();
             sites.Add(new Site("https://g1.globo.com/", "a", "feed-post-link gui-color-primary gui-color-hover"));            
             sites.Add(new Site("https://techtudo.com.br", "a", "feed-post-link gui-color-primary gui-color-hover"));   
@@ -40,7 +41,7 @@ namespace POOA_T2
         private async System.Threading.Tasks.Task executa(Site site, String caminho = "", String nomeArq = "", String extensao = "")
         {
             string dir = diretorio.geraDiretorio(caminho, nomeArq, extensao); //Gera o caminho completo, incluindo o nome do arquivo, mas não cria o arquivo
-            List<string> l = await dumpInfos.dumpAsync(site.getUrl(), site.getTag(), site.getClasse());
+            List<string> l = await dumpInfos.dumpAsync(site.getUrl(), site.getTag(), site.getClasse()); //Pega as infos (títulos e links das notícias)
             String ger = treatmentStrings.createString(l); //Junta em uma string só todas as linhas criadas na dumpInfos
 
             write.inFile(dir, ger); //Cria o arquivo com o texto
